@@ -30,20 +30,15 @@
             float scaleSize = 0f;
             switch (cubeName) {
                 case "SmallCube":
-                    scaleSize = 0.2f;
+                    scaleSize = 0.5f;
                     break;
             }
-            meshAndRigid.transform.localScale = new Vector3(scaleSize, scaleSize, scaleSize); 
-            BoxCollider colliderMeshAndRigid = meshAndRigid.AddComponent<BoxCollider>();
-            colliderMeshAndRigid.size = new Vector3(1, 1, 1);
-            colliderMeshAndRigid.center = new Vector3(0, 0, 0);
-            Collider playerCollider = actualPlayerCube.GetComponent<Collider>();
-            playerCollider.enabled = false;
-            Rigidbody rigidActualPlayer = actualPlayerCube.GetComponent<Rigidbody>();
-            Destroy(rigidActualPlayer);
-            //BoxCollider colliderPlayerCube = actualPlayerCube.AddComponent<BoxCollider>();
-            //colliderPlayerCube.size = new Vector3(1, 1, 1);
-            //colliderPlayerCube.center = new Vector3(0, 0, 0);
+            meshAndRigid.transform.localScale = new Vector3(scaleSize, scaleSize, scaleSize);
+            meshAndRigid.transform.localPosition = new Vector3(0, scaleSize/2, 0);
+            actualPlayerCube.GetComponent<Collider>().enabled = false;
+            BoxCollider colliderPlayerCube = actualPlayerCube.AddComponent<BoxCollider>();
+            colliderPlayerCube.size = new Vector3(scaleSize, scaleSize, scaleSize);
+            colliderPlayerCube.center = new Vector3(0, scaleSize/2, -0);
             //this.transform.SetParent(actualPlayerCube.transform);
             //squareArea.transform.localPosition = new Vector3(0, -meshCube.transform.localScale.y/2, 0);
         }
