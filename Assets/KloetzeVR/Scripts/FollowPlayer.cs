@@ -3,6 +3,12 @@
     using System.Collections.Generic;
     using UnityEngine;
 
+    /**
+     * 
+     * Script damit die Square Area, also der teleportierbare Bereich sich mit dem Spieler bewegt
+     * 
+    **/
+
     public class FollowPlayer : MonoBehaviour {
         //public GameObject actualPlayer;
         //// Use this for initialization
@@ -78,7 +84,7 @@
             //position.x = this.transform.position.x;
             //position.z = this.transform.position.z;
             //this.transform.position = position;
-            print(position);
+            //print(position);
         }
         void DisableCollider(Collider col) {
             print("disable " + col.name);

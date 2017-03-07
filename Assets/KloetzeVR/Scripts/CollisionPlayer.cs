@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+ * 
+ * dazu gedacht, dass wenn der Spieler gegen eine Wand läuft, der Bildschirm schwarz wird
+ * 
+ **/
+
 public class CollisionPlayer : MonoBehaviour {
     public GameObject playerCameraBlack;
 

@@ -3,20 +3,21 @@
     using System.Collections.Generic;
     using UnityEngine;
 
+    /**
+     * 
+     * Script damit, der Spieler seine Figur wechseln kann, mit den dazu passenden Eigenschaften der Figuren
+     * 
+     * */
+
     public class ChangePlayerCube : MonoBehaviour {
         public GameObject actualPlayerCube;
-        public GameObject meshCube;
+        public GameObject cubeInteraction;
         public GameObject meshAndRigid;
-        public GameObject squareArea;
-        private Vector3 offset;         //Private variable to store the offset distance between the player and camera
-        // Use this for initialization
 
         void Start() {
-            //actualPlayerCube = VRTK_SDKManager.instance.actualBoundaries;
-            //meshCube = this.transform.gameObject;
-            //meshAndRigid = this.gameObject.transform.FindChild("MeshAndRigid").gameObject;
-            //squareArea = this.gameObject.transform.FindChild("SquareArea").gameObject;
-            //squareArea = meshAndRigid.transform.FindChild("SquareArea").gameObject;
+            actualPlayerCube = VRTK_SDKManager.instance.actualBoundaries;
+            cubeInteraction = this.transform.gameObject;
+            meshAndRigid = this.gameObject.transform.FindChild("MeshAndRigid").gameObject;
             changeCube("SmallCube");
         }
 
@@ -32,26 +33,15 @@
                     scaleSize = 0.2f;
                     break;
             }
-            //BoxCollider colliderPlayerCube = actualPlayerCube.AddComponent<BoxCollider>();
-            //colliderPlayerCube.size = new Vector3(scaleSize, scaleSize, scaleSize);
-            ////colliderPlayerCube.transform.position = transform.position;
-            //offset = transform.position - actualPlayerCube.transform.position;
-            //actualPlayerCube.transform.position = transform.position;
+            meshAndRigid.transform.localScale = new Vector3(scaleSize, scaleSize, scaleSize); 
+            BoxCollider colliderPlayerCube = meshAndRigid.AddComponent<BoxCollider>();
+            colliderPlayerCube.size = new Vector3(scaleSize, scaleSize, scaleSize);
             //this.transform.SetParent(actualPlayerCube.transform);
-            //BoxCollider colliderPlayerCube = actualPlayerCube.AddComponent<BoxCollider>();
-            //colliderPlayerCube.size = new Vector3(scaleSize, scaleSize, scaleSize);
-            //colliderPlayerCube.transform.position = transform.position;
             //squareArea.transform.localPosition = new Vector3(0, -meshCube.transform.localScale.y/2, 0);
         }
 
         private void LateUpdate() {
             //transform.position = actualPlayerCube.transform.position + offset;
-        }
-
-        public static void doCreateNewCameraRig() {
-            Destroy(VRTK_SDKManager.instance.actualBoundaries);
-            GameObject go = (GameObject)Instantiate(Resources.Load("VRSimulatorCameraRig"));
-            VRTK_SDKManager.instance.actualBoundaries = go;
         }
     }
 }
