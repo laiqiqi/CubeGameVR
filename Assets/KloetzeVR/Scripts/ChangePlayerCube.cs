@@ -18,6 +18,7 @@
         //public enum cubeNames { SmallCube, GrabCube, LargeCube, InteractionCube};
         private int actualCubeNameInt;
         public enum cubeNames : int {SmallCube = 0, GrabCube = 1, LargeCube = 2, InteractionCube = 3, END = 4};
+        public bool startDone = false;
 
         void Start() {
             actualPlayerCube = VRTK_SDKManager.instance.actualBoundaries;
@@ -35,6 +36,7 @@
             actualCubeNameInt = (int)cubeNames.GrabCube;
             changeCube(actualCubeNameInt);
             //meshAndRigid.transform.get
+            startDone = true;
 
         }
 
@@ -49,43 +51,23 @@
 
         public void changeCube(int cubeInt) {
             float scaleSize = 0f;
-            switch (cubeInt) {
-                case (int)cubeNames.SmallCube:
-                    scaleSize = 0.5f;
-                    //actualPlayerCube.transform.position = playerCubeTransforms[0].transform.position;
-                    //meshAndRigid.GetComponent<Renderer>().material = playerCubeTransforms[0].GetComponent<Renderer>().material;
-                    //playerCubeTransforms[0].SetActive(false);
-                    break;
-                case (int)cubeNames.GrabCube:
-                    scaleSize = 0.8f;
-                    break;
-                case (int)cubeNames.LargeCube:
-                    scaleSize = 1;
-                    break;
-                case (int)cubeNames.InteractionCube:
-                    scaleSize = 0.8f;
-                    break;
-                default:
-                    print("Error: Cube wechseln nicht möglich zu " + cubeInt);
-                    break;
-            }
+            
+            scaleSize = playerCubeTransforms[cubeInt].transform.lossyScale.x;
             playerCubeTransforms[previousCubeInt(cubeInt)].SetActive(true);
             meshAndRigid.transform.localScale = new Vector3(scaleSize, scaleSize, scaleSize);
             meshAndRigid.transform.localPosition = new Vector3(0, scaleSize/2, 0);
+            if (startDone) {
+                Vector3 newPosition = actualPlayerCube.transform.position;
+                newPosition.y += actualPlayerCube.transform.lossyScale.y / 2;
+                playerCubeTransforms[previousCubeInt(cubeInt)].transform.position = newPosition;
+            }
             actualPlayerCube.GetComponent<Collider>().enabled = false;
             colliderPlayerCube.size = new Vector3(scaleSize, scaleSize, scaleSize);
             colliderPlayerCube.center = new Vector3(0, scaleSize/2, -0);
-            //this.transform.SetParent(actualPlayerCube.transform);
-            //squareArea.transform.localPosition = new Vector3(0, -meshCube.transform.localScale.y/2, 0);
-
-
-            ////////////////
+            this.transform.SetParent(actualPlayerCube.transform);
             actualPlayerCube.transform.position = playerCubeTransforms[cubeInt].transform.position;
-            
             meshAndRigid.GetComponent<Renderer>().material = playerCubeTransforms[cubeInt].GetComponent<Renderer>().material;
             playerCubeTransforms[cubeInt].SetActive(false);
-
-            ////////////
         }
 
         private void LateUpdate() {
