@@ -13,50 +13,67 @@
         public GameObject actualPlayerCube;
         public GameObject cubeInteraction;
         public GameObject meshAndRigid;
+        BoxCollider colliderPlayerCube;
+        public GameObject[] playerCubeTransforms = new GameObject[4];
+        //public enum cubeNames { SmallCube, GrabCube, LargeCube, InteractionCube};
+        private int actualCubeNameInt;
+        public enum cubeNames : int {SmallCube = 0, GrabCube = 1, LargeCube = 2, InteractionCube = 3, END = 4};
 
         void Start() {
             actualPlayerCube = VRTK_SDKManager.instance.actualBoundaries;
+            colliderPlayerCube = actualPlayerCube.AddComponent<BoxCollider>();
             cubeInteraction = this.transform.gameObject;
             meshAndRigid = this.gameObject.transform.FindChild("MeshAndRigid").gameObject;
-            changeCube("SmallCube");
+            actualCubeNameInt = (int)cubeNames.GrabCube;
+            changeCube(actualCubeNameInt);
+            //meshAndRigid.transform.fi
         }
 
         // Update is called once per frame
         void Update() {
-            //this.transform.position = actualPlayerCube.transform.position;
+            if (Input.GetKeyUp(KeyCode.L)) {
+                //Debug.Log("L Key was released. Change to CubeNr" + ((actualCubeNameInt+1)%( (int)cubeNames.END )));
+                actualCubeNameInt = nextCubeInt(actualCubeNameInt) ;
+                changeCube(actualCubeNameInt);
+            }
         }
 
-        public void changeCube(string cubeName) {
+        public void changeCube(int cubeInt) {
             float scaleSize = 0f;
-            switch (cubeName) {
-                case "SmallCube":
+            switch (cubeInt) {
+                case (int)cubeNames.SmallCube:
                     scaleSize = 0.5f;
                     break;
-                case "GrabCube":
+                case (int)cubeNames.GrabCube:
                     scaleSize = 0.8f;
                     break;
-                case "LargeCube":
+                case (int)cubeNames.LargeCube:
                     scaleSize = 1;
                     break;
-                case "InteractionCube":
+                case (int)cubeNames.InteractionCube:
                     scaleSize = 0.8f;
                     break;
                 default:
-                    print("Error: Falscher String zum Cube wechseln");
+                    print("Error: Cube wechseln nicht möglich zu " + cubeInt);
                     break;
             }
             meshAndRigid.transform.localScale = new Vector3(scaleSize, scaleSize, scaleSize);
             meshAndRigid.transform.localPosition = new Vector3(0, scaleSize/2, 0);
             actualPlayerCube.GetComponent<Collider>().enabled = false;
-            BoxCollider colliderPlayerCube = actualPlayerCube.AddComponent<BoxCollider>();
             colliderPlayerCube.size = new Vector3(scaleSize, scaleSize, scaleSize);
             colliderPlayerCube.center = new Vector3(0, scaleSize/2, -0);
             //this.transform.SetParent(actualPlayerCube.transform);
             //squareArea.transform.localPosition = new Vector3(0, -meshCube.transform.localScale.y/2, 0);
+            
+            
         }
 
         private void LateUpdate() {
             //transform.position = actualPlayerCube.transform.position + offset;
+        }
+
+        private int nextCubeInt(int cubeInt) {
+            return ( (actualCubeNameInt + 1) % (int)cubeNames.END );
         }
     }
 }

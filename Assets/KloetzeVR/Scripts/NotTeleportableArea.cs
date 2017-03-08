@@ -10,16 +10,15 @@
     public class NotTeleportableArea : MonoBehaviour {
         public GameObject actualPlayerCube;
         public GameObject meshAndRigid;
-        public Transform areaForTeleport;
+        public Transform tAreaForTeleport;
         public float highestPointPlayer;
         public float lowestPointWall;
         // Use this for initialization
         void Start() {
             actualPlayerCube = VRTK_SDKManager.instance.actualBoundaries;
             meshAndRigid = actualPlayerCube.transform.FindChild("CubeInteraction").FindChild("MeshAndRigid").gameObject;
-            areaForTeleport = transform.FindChild("AreaForTeleport");
-            areaForTeleport.position = new Vector3(areaForTeleport.position.x, 0, areaForTeleport.position.z);
-            
+            tAreaForTeleport = transform.FindChild("AreaForTeleport");
+            tAreaForTeleport.position = new Vector3(tAreaForTeleport.position.x, 0, tAreaForTeleport.position.z);
         }
 
         // Update is called once per frame
@@ -31,9 +30,11 @@
             highestPointPlayer = actualPlayerCube.transform.position.y + meshAndRigid.transform.localPosition.y + (meshAndRigid.transform.lossyScale.y / 2);
             lowestPointWall = transform.position.y - (transform.lossyScale.y / 2);
             if (highestPointPlayer <= lowestPointWall) {
-                areaForTeleport.tag = "IncludeTeleport";
+                tAreaForTeleport.tag = "IncludeTeleport";
+                tAreaForTeleport.gameObject.GetComponent<Renderer>().material = Resources.Load("TeleportableArea") as Material;
             } else {
-                areaForTeleport.tag = "Untagged";
+                tAreaForTeleport.tag = "Untagged";
+                tAreaForTeleport.gameObject.GetComponent<Renderer>().material = Resources.Load("MatNotTeleportArea") as Material;
             }
         }
     }
