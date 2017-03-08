@@ -18,7 +18,7 @@
             actualPlayerCube = VRTK_SDKManager.instance.actualBoundaries;
             meshAndRigid = actualPlayerCube.transform.FindChild("CubeInteraction").FindChild("MeshAndRigid").gameObject;
             tAreaForTeleport = transform.FindChild("AreaForTeleport");
-            tAreaForTeleport.position = new Vector3(tAreaForTeleport.position.x, 0, tAreaForTeleport.position.z);
+            tAreaForTeleport.position = new Vector3(tAreaForTeleport.position.x, 0.02f, tAreaForTeleport.position.z);
         }
 
         // Update is called once per frame
