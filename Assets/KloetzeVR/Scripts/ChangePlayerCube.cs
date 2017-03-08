@@ -11,10 +11,10 @@
 
     public class ChangePlayerCube : MonoBehaviour {
         public GameObject actualPlayerCube;
-        public GameObject cubeInteraction;
+        private BoxCollider colliderPlayerCube;
         public GameObject meshAndRigid;
-        BoxCollider colliderPlayerCube;
-        public GameObject[] playerCubeTransforms = new GameObject[4];
+        public GameObject cubesToChange;
+        public GameObject[] playerCubeTransforms;
         //public enum cubeNames { SmallCube, GrabCube, LargeCube, InteractionCube};
         private int actualCubeNameInt;
         public enum cubeNames : int {SmallCube = 0, GrabCube = 1, LargeCube = 2, InteractionCube = 3, END = 4};
@@ -22,11 +22,20 @@
         void Start() {
             actualPlayerCube = VRTK_SDKManager.instance.actualBoundaries;
             colliderPlayerCube = actualPlayerCube.AddComponent<BoxCollider>();
-            cubeInteraction = this.transform.gameObject;
             meshAndRigid = this.gameObject.transform.FindChild("MeshAndRigid").gameObject;
+            meshAndRigid.GetComponent<Renderer>().enabled = true;
+            cubesToChange = this.gameObject.transform.FindChild("CubesToChange").gameObject;
+            playerCubeTransforms = new GameObject[4];
+            int childInt = 0; 
+            foreach (Transform child in cubesToChange.transform) {
+                playerCubeTransforms[childInt++] = child.gameObject;
+                child.gameObject.SetActive(true);
+            }
+            cubesToChange.transform.SetParent(null);
             actualCubeNameInt = (int)cubeNames.GrabCube;
             changeCube(actualCubeNameInt);
-            //meshAndRigid.transform.fi
+            //meshAndRigid.transform.get
+
         }
 
         // Update is called once per frame
@@ -43,6 +52,9 @@
             switch (cubeInt) {
                 case (int)cubeNames.SmallCube:
                     scaleSize = 0.5f;
+                    //actualPlayerCube.transform.position = playerCubeTransforms[0].transform.position;
+                    //meshAndRigid.GetComponent<Renderer>().material = playerCubeTransforms[0].GetComponent<Renderer>().material;
+                    //playerCubeTransforms[0].SetActive(false);
                     break;
                 case (int)cubeNames.GrabCube:
                     scaleSize = 0.8f;
@@ -57,6 +69,7 @@
                     print("Error: Cube wechseln nicht möglich zu " + cubeInt);
                     break;
             }
+            playerCubeTransforms[previousCubeInt(cubeInt)].SetActive(true);
             meshAndRigid.transform.localScale = new Vector3(scaleSize, scaleSize, scaleSize);
             meshAndRigid.transform.localPosition = new Vector3(0, scaleSize/2, 0);
             actualPlayerCube.GetComponent<Collider>().enabled = false;
@@ -64,8 +77,15 @@
             colliderPlayerCube.center = new Vector3(0, scaleSize/2, -0);
             //this.transform.SetParent(actualPlayerCube.transform);
             //squareArea.transform.localPosition = new Vector3(0, -meshCube.transform.localScale.y/2, 0);
+
+
+            ////////////////
+            actualPlayerCube.transform.position = playerCubeTransforms[cubeInt].transform.position;
             
-            
+            meshAndRigid.GetComponent<Renderer>().material = playerCubeTransforms[cubeInt].GetComponent<Renderer>().material;
+            playerCubeTransforms[cubeInt].SetActive(false);
+
+            ////////////
         }
 
         private void LateUpdate() {
@@ -74,6 +94,10 @@
 
         private int nextCubeInt(int cubeInt) {
             return ( (actualCubeNameInt + 1) % (int)cubeNames.END );
+        }
+
+        private int previousCubeInt(int cubeint) {
+            return (cubeint-1+(int)cubeNames.END) % (int)cubeNames.END;
         }
     }
 }
