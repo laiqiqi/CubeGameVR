@@ -11,14 +11,14 @@
         public GameObject actualPlayerCube;
         public GameObject meshAndRigid;
         public Transform areaForTeleport;
-        float highestPointPlayer;
-        float lowestPointWall;
+        public float highestPointPlayer;
+        public float lowestPointWall;
         // Use this for initialization
         void Start() {
             actualPlayerCube = VRTK_SDKManager.instance.actualBoundaries;
             meshAndRigid = actualPlayerCube.transform.FindChild("CubeInteraction").FindChild("MeshAndRigid").gameObject;
             areaForTeleport = transform.FindChild("AreaForTeleport");
-            areaForTeleport.position = new Vector3(areaForTeleport.position.x, 0.52f, areaForTeleport.position.z);
+            areaForTeleport.position = new Vector3(areaForTeleport.position.x, 0, areaForTeleport.position.z);
             
         }
 

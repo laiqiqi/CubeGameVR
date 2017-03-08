@@ -56,12 +56,14 @@
         ////////////////////////////////////////////////////////////////////////
         public GameObject objectToFollow;
         public float speed = 0.5f;
+        public float ySquareAreaPos;
         int oldLayer = -1;
         int voidLayer;
         float offsetY;
 
 
         private void Start() {
+            ySquareAreaPos = this.transform.position.y;
             objectToFollow = VRTK_SDKManager.instance.actualBoundaries;
             voidLayer = LayerMask.NameToLayer("Void");
             //DisableCollider(gameObject.GetComponent<Collider>());
@@ -71,7 +73,7 @@
             float interpolation = speed * Time.deltaTime;
 
             Vector3 position = this.transform.position;
-            position.y = 0.5f;
+            position.y = ySquareAreaPos; //0.01f;
             position.x = Mathf.Lerp(this.transform.position.x, objectToFollow.transform.position.x, interpolation);
             position.z = Mathf.Lerp(this.transform.position.z, objectToFollow.transform.position.z, interpolation);
             this.transform.position = position;
