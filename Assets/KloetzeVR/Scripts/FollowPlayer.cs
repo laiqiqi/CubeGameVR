@@ -64,9 +64,8 @@
         private void Start() {
             objectToFollow = VRTK_SDKManager.instance.actualBoundaries;
             voidLayer = LayerMask.NameToLayer("Void");
-            DisableCollider(gameObject.GetComponent<Collider>());
+            //DisableCollider(gameObject.GetComponent<Collider>());
             offsetY = objectToFollow.transform.position.y - this.transform.position.y;
-            print(offsetY);
         }
         void Update() {
             float interpolation = speed * Time.deltaTime;

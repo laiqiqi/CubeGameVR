@@ -169,7 +169,6 @@ namespace VRTK
                 Blink(blinkTransitionSpeed);
                 SetNewPosition(newPosition, e.target, e.forceDestinationPosition);
                 OnTeleported(sender, e);
-                print("dotele");
             }
         }
 

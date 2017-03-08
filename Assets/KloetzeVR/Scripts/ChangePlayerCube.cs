@@ -32,6 +32,18 @@
                 case "SmallCube":
                     scaleSize = 0.5f;
                     break;
+                case "GrabCube":
+                    scaleSize = 0.8f;
+                    break;
+                case "LargeCube":
+                    scaleSize = 1;
+                    break;
+                case "InteractionCube":
+                    scaleSize = 0.8f;
+                    break;
+                default:
+                    print("Error: Falscher String zum Cube wechseln");
+                    break;
             }
             meshAndRigid.transform.localScale = new Vector3(scaleSize, scaleSize, scaleSize);
             meshAndRigid.transform.localPosition = new Vector3(0, scaleSize/2, 0);
