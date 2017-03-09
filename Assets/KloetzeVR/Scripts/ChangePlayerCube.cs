@@ -2,6 +2,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
+    using System.Linq;
 
     /**
      * 
@@ -18,6 +19,7 @@
         public GameObject meshAndRigid;
         public GameObject cubesToChange;
         public GameObject[] playerCubes;
+        public List<Transform> tInteractionObjets;
         public int anzahlCubes = 4;
         public int actualCubeNameID;
         public enum cubeNames : int {SmallCube = 0, GrabCube = 1, LargeCube = 2, InteractionCube = 3, END = 4};
@@ -38,6 +40,11 @@
                 playerCubes[childInt++] = child.gameObject;
                 child.gameObject.SetActive(true);
             }
+
+            foreach (Transform child in GameObject.Find("InteractionObjects").transform) {
+                tInteractionObjets.Add(child.FindChild("RadialMenu"));
+            }
+
             cubesToChange.transform.SetParent(null);
             actualCubeNameID = (int)cubeNames.GrabCube;
             //setzt den Capsule Collider des Spielers auf false, da wir den Box Collider nutzen wollen. 
@@ -133,24 +140,28 @@
                     vrtkRightController.GetComponent<VRTK_InteractGrab>().enabled = false;
                     vrtkLeftController.GetComponent<VRTK_InteractGrab>().enabled = false;
                     playArea.GetComponent<VRTK_PolicyList>().identifiers[1] = "IncludeTeleport";
+                    setInteractionObjRadiant(false);
                     break;
 
                 case "GrabCube":
                     vrtkRightController.GetComponent<VRTK_InteractGrab>().enabled = true;
                     vrtkLeftController.GetComponent<VRTK_InteractGrab>().enabled = true;
                     playArea.GetComponent<VRTK_PolicyList>().identifiers[1] = "IncludeTeleport";
+                    setInteractionObjRadiant(false);
                     break;
 
                 case "LargeCube":
                     vrtkRightController.GetComponent<VRTK_InteractGrab>().enabled = false;
                     vrtkLeftController.GetComponent<VRTK_InteractGrab>().enabled = false;
                     playArea.GetComponent<VRTK_PolicyList>().identifiers[1] = "LargeIncludeTeleport";
+                    setInteractionObjRadiant(false);
                     break;
 
                 case "InteractionCube":
                     vrtkRightController.GetComponent<VRTK_InteractGrab>().enabled = false;
                     vrtkLeftController.GetComponent<VRTK_InteractGrab>().enabled = false;
                     playArea.GetComponent<VRTK_PolicyList>().identifiers[1] = "IncludeTeleport";
+                    setInteractionObjRadiant(true);
                     break;
 
                 default:
@@ -158,5 +169,11 @@
                     break;
             }
         }
+
+        private void setInteractionObjRadiant(bool radialOn) {
+            foreach (Transform intObject in tInteractionObjets) {
+                intObject.gameObject.SetActive(radialOn);
+            }
+        } 
     }
 }
