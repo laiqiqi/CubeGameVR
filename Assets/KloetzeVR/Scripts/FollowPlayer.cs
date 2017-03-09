@@ -63,6 +63,7 @@
 
 
         private void Start() {
+            this.transform.SetParent(null);
             ySquareAreaPos = this.transform.position.y;
             objectToFollow = VRTK_SDKManager.instance.actualBoundaries;
             voidLayer = LayerMask.NameToLayer("Void");

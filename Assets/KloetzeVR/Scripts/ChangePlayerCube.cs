@@ -16,6 +16,7 @@
         public GameObject vrtkRightController;
         public GameObject vrtkLeftController;
         private BoxCollider colliderPlayerCube;
+        public GameObject squareArea;
         public GameObject meshAndRigid;
         public GameObject cubesToChange;
         public GameObject[] playerCubes;
@@ -31,6 +32,7 @@
             vrtkLeftController = VRTK_SDKManager.instance.scriptAliasLeftController;
             vrtkRightController = VRTK_SDKManager.instance.scriptAliasRightController;
             colliderPlayerCube = actualPlayerCube.AddComponent<BoxCollider>();
+            squareArea = this.transform.FindChild("SquareArea").gameObject;
             meshAndRigid = this.gameObject.transform.FindChild("MeshAndRigid").gameObject;
             meshAndRigid.GetComponent<Renderer>().enabled = true;
             cubesToChange = this.gameObject.transform.FindChild("CubesToChange").gameObject;
@@ -80,10 +82,12 @@
 
             //BoxCollider für den playerCube setzen
             colliderPlayerCube.size = new Vector3(scaleSize, scaleSize, scaleSize);
-            colliderPlayerCube.center = new Vector3(0, scaleSize / 2, -0);
+            colliderPlayerCube.center = new Vector3(0, 0, 0);
 
             //auf die Position der PlayerCube springen und Farbe ändern
             actualPlayerCube.transform.position = playerCubes[cubeID].transform.position;
+            actualPlayerCube.transform.rotation = playerCubes[cubeID].transform.rotation;
+            squareArea.transform.position = new Vector3(actualPlayerCube.transform.position.x, actualPlayerCube.transform.position.y - scaleSize / 2, actualPlayerCube.transform.position.z);
 
             setFunctionsForSelectedPlayerCube(cubeID);
             playerCubes[cubeID].transform.SetParent(transform);
@@ -137,6 +141,7 @@
             string gObj = playerCubes[cubeID].name;
             switch (gObj) {
                 case "SmallCube":
+                    vrtkRightController.GetComponent<VRTK_BezierPointerRenderer>().heightLimitAngle = 10;
                     vrtkRightController.GetComponent<VRTK_InteractGrab>().enabled = false;
                     vrtkLeftController.GetComponent<VRTK_InteractGrab>().enabled = false;
                     playArea.GetComponent<VRTK_PolicyList>().identifiers[1] = "IncludeTeleport";
@@ -144,6 +149,7 @@
                     break;
 
                 case "GrabCube":
+                    vrtkRightController.GetComponent<VRTK_BezierPointerRenderer>().heightLimitAngle = 8;
                     vrtkRightController.GetComponent<VRTK_InteractGrab>().enabled = true;
                     vrtkLeftController.GetComponent<VRTK_InteractGrab>().enabled = true;
                     playArea.GetComponent<VRTK_PolicyList>().identifiers[1] = "IncludeTeleport";
@@ -151,6 +157,7 @@
                     break;
 
                 case "LargeCube":
+                    vrtkRightController.GetComponent<VRTK_BezierPointerRenderer>().heightLimitAngle = 6;
                     vrtkRightController.GetComponent<VRTK_InteractGrab>().enabled = false;
                     vrtkLeftController.GetComponent<VRTK_InteractGrab>().enabled = false;
                     playArea.GetComponent<VRTK_PolicyList>().identifiers[1] = "LargeIncludeTeleport";
@@ -158,6 +165,7 @@
                     break;
 
                 case "InteractionCube":
+                    vrtkRightController.GetComponent<VRTK_BezierPointerRenderer>().heightLimitAngle = 8;
                     vrtkRightController.GetComponent<VRTK_InteractGrab>().enabled = false;
                     vrtkLeftController.GetComponent<VRTK_InteractGrab>().enabled = false;
                     playArea.GetComponent<VRTK_PolicyList>().identifiers[1] = "IncludeTeleport";
